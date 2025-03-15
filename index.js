@@ -1,24 +1,18 @@
-// products-api.js
 require('dotenv').config();
 const express = require('express');
 const { createClient } = require('@supabase/supabase-js');
 const cors = require('cors')
 
-// Initialize Express app
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Initialize Supabase client
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Product Routes
-// 1. Get all products
 app.get('/api/products', async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -29,12 +23,11 @@ app.get('/api/products', async (req, res) => {
     
     res.status(200).json(data);
   } catch (error) {
-    console.error('Error fetching products:', error);
-    res.status(500).json({ error: 'Failed to fetch products' });
+    console.error('Error al obtener los productos:', error);
+    res.status(500).json({ error: 'Error al obtener los productos' });
   }
 });
 
-// 2. Get product by SKU
 app.get('/api/products/:sku', async (req, res) => {
   try {
     const { sku } = req.params;
@@ -53,12 +46,11 @@ app.get('/api/products/:sku', async (req, res) => {
     
     res.status(200).json(data);
   } catch (error) {
-    console.error('Error fetching product:', error);
-    res.status(500).json({ error: 'Failed to fetch product' });
+    console.error('Error al obtener el producto:', error);
+    res.status(500).json({ error: 'Error al obtener el producto' });
   }
 });
 
-// 3. Create a new product
 app.post('/api/products', async (req, res) => {
   try {
     const { sku, name, description, price } = req.body;
@@ -79,12 +71,11 @@ app.post('/api/products', async (req, res) => {
     
     res.status(201).json(data[0]);
   } catch (error) {
-    console.error('Error creating product:', error);
-    res.status(500).json({ error: 'Failed to create product' });
+    console.error('Error al crear el producto:', error);
+    res.status(500).json({ error: 'Error al crear el producto' });
   }
 });
 
-// 4. Update an existing product
 app.put('/api/products/:sku', async (req, res) => {
   try {
     const { sku } = req.params;
@@ -105,12 +96,11 @@ app.put('/api/products/:sku', async (req, res) => {
 
     res.status(200).json(data[0]);
   } catch (error) {
-    console.error('Error updating product:', error);
-    res.status(500).json({ error: 'Failed to update product' });
+    console.error('Error al actualizar el producto:', error);
+    res.status(500).json({ error: 'Error al actualizar el producto' });
   }
 });
 
-// 5. Delete a product
 app.delete('/api/products/:sku', async (req, res) => {
   try {
     const { sku } = req.params;
@@ -124,12 +114,11 @@ app.delete('/api/products/:sku', async (req, res) => {
 
     res.status(204).send();
   } catch (error) {
-    console.error('Error deleting product:', error);
-    res.status(500).json({ error: 'Failed to delete product' });
+    console.error('Error al eliminar el producto:', error);
+    res.status(500).json({ error: 'Error al eliminar el producto' });
   }
 });
 
-// 6. Get all terms
 app.get('/api/terms', async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -140,19 +129,18 @@ app.get('/api/terms', async (req, res) => {
 
     res.status(200).json(data);
   } catch (error) {
-    console.error('Error fetching terms:', error);
-    res.status(500).json({ error: 'Failed to fetch terms' });
+    console.error('Error al obtener los términos:', error);
+    res.status(500).json({ error: 'Error al obtener los términos' });
   }
 });
 
-// 7. Create a new term
 app.post('/api/terms', async (req, res) => {
   try {
     const { weeks, normal_rate, punctual_rate } = req.body;
 
     // Validate required fields
     if (!weeks || !normal_rate || !punctual_rate) {
-      return res.status(400).json({ error: 'Weeks, normal_rate, and punctual_rate are required' });
+      return res.status(400).json({ error: 'Semanas, tasa normal y tasa puntual son requeridos' });
     }
 
     const { data, error } = await supabase
@@ -166,12 +154,11 @@ app.post('/api/terms', async (req, res) => {
 
     res.status(201).json(data[0]);
   } catch (error) {
-    console.error('Error creating term:', error);
-    res.status(500).json({ error: 'Failed to create term' });
+    console.error('Error al crear el término:', error);
+    res.status(500).json({ error: 'Error al crear el término' });
   }
 });
 
-// 8. Calculate credit quote
 app.post('/api/quote', async (req, res) => {
   try {
     const { sku, weeks } = req.body;
@@ -202,12 +189,11 @@ app.post('/api/quote', async (req, res) => {
       punctualPayment
     });
   } catch (error) {
-    console.error('Error calculating quote:', error);
-    res.status(500).json({ error: 'Failed to calculate quote' });
+    console.error('Error al calcular la cotización:', error);
+    res.status(500).json({ error: 'Error al calcular la cotización' });
   }
 });
 
-// Iniciar el servidor
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`Servidor corriendo en el puerto ${port}`);
 });
