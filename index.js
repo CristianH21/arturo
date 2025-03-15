@@ -84,6 +84,8 @@ app.post('/api/products', async (req, res) => {
   }
 });
 
+// 4. Delete a product
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
